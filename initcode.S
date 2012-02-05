@@ -1,7 +1,7 @@
 # Initial process execs /init.
 
-#include "syscall.h"
-#include "traps.h"
+#include <sys/syscall.h>
+#include <sys/traps.h>
 
 
 # exec(init, argv)

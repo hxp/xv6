@@ -1,9 +1,9 @@
-#include "types.h"
-#include "defs.h"
-#include "param.h"
-#include "spinlock.h"
-#include "fs.h"
-#include "buf.h"
+#include <sys/types.h>
+#include <sys/defs.h>
+#include <sys/param.h>
+#include <sys/spinlock.h>
+#include <sys/fs.h>
+#include <sys/buf.h>
 
 // Simple logging. Each system call that might write the file system
 // should be surrounded with begin_trans() and commit_trans() calls.

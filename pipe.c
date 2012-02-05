@@ -1,11 +1,11 @@
-#include "types.h"
-#include "defs.h"
-#include "param.h"
-#include "mmu.h"
-#include "proc.h"
-#include "fs.h"
-#include "file.h"
-#include "spinlock.h"
+#include <sys/types.h>
+#include <sys/defs.h>
+#include <sys/param.h>
+#include <sys/mmu.h>
+#include <sys/proc.h>
+#include <sys/fs.h>
+#include <sys/file.h>
+#include <sys/spinlock.h>
 
 #define PIPESIZE 512
 

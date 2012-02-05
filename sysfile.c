@@ -4,15 +4,15 @@
 // user code, and calls into file.c and fs.c.
 //
 
-#include "types.h"
-#include "defs.h"
-#include "param.h"
-#include "stat.h"
-#include "mmu.h"
-#include "proc.h"
-#include "fs.h"
-#include "file.h"
-#include "fcntl.h"
+#include <sys/types.h>
+#include <sys/defs.h>
+#include <sys/param.h>
+#include <sys/stat.h>
+#include <sys/mmu.h>
+#include <sys/proc.h>
+#include <sys/fs.h>
+#include <sys/file.h>
+#include <sys/fcntl.h>
 
 // Fetch the nth word-sized system call argument as a file descriptor
 // and return both the descriptor and the corresponding struct file.

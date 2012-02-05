@@ -2,51 +2,25 @@ OBJS =  bio.o console.o exec.o file.o fs.o ide.o ioapic.o kalloc.o kbd.o lapic.o
 		mp.o picirq.o pipe.o proc.o spinlock.o string.o swtch.o syscall.o sysfile.o sysproc.o \
 		timer.o trapasm.o trap.o uart.o vectors.o vm.o
 
+include standard_defs.mk
 
-# Cross-compiling (e.g., on Mac OS X)
-TOOLPREFIX = i586-elf-
-
-# Path to QEMU
-QEMU = qemu-system-i386
-
-CC = $(TOOLPREFIX)gcc
-AS = $(TOOLPREFIX)as
-LD = $(TOOLPREFIX)ld
-OBJCOPY = $(TOOLPREFIX)objcopy
-OBJDUMP = $(TOOLPREFIX)objdump
-
-# optimize 
-#CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer
-
-# non-optimized 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -Wall -ggdb -m32 -Werror -fno-omit-frame-pointer
-CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector) -c
-ASFLAGS = -m32 -gdwarf-2 -Wa,-divide -c -x assembler-with-cpp
-xv6.img: bootblock kernel fs.img
+xv6.img: boot/bootblock kernel fs.img
 	dd if=/dev/zero of=xv6.img count=10000
-	dd if=bootblock of=xv6.img conv=notrunc
+	dd if=boot/bootblock of=xv6.img conv=notrunc
 	dd if=kernel of=xv6.img seek=1 conv=notrunc
 
-xv6memfs.img: bootblock kernelmemfs
+xv6memfs.img: boot/bootblock kernelmemfs
     dd if=/dev/zero of=xv6memfs.img count=10000
     dd if=bootblock of=xv6memfs.img conv=notrunc
     dd if=kernelmemfs of=xv6memfs.img seek=1 conv=notrunc
 
-bootblock: bootasm.S bootmain.c
-    $(CC) $(CFLAGS) -fno-pic -O -nostdinc -I. -c bootmain.c
-    $(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c bootasm.S
-    $(LD) $(LDFLAGS) -N -e start -Ttext 0x7C00 -o bootblock.o bootasm.o bootmain.o
-    $(OBJDUMP) -S bootblock.o > bootblock.asm
-    $(OBJCOPY) -S -O binary -j .text bootblock.o bootblock
-    ./sign.pl bootblock
-
-entryother: entryother.S
+entryother bootblockother.o entryother.o: entryother.S
     $(CC) $(CFLAGS) -fno-pic -nostdinc -I. -c entryother.S
     $(LD) $(LDFLAGS) -N -e start -Ttext 0x7000 -o bootblockother.o entryother.o
     $(OBJCOPY) -S -O binary -j .text bootblockother.o entryother
     $(OBJDUMP) -S bootblockother.o > entryother.asm
 
-initcode: initcode.S
+initcode initcode.o: initcode.S
     $(CC) $(CFLAGS) -nostdinc -I. -c initcode.S
     $(LD) $(LDFLAGS) -N -e start -Ttext 0 -o initcode.out initcode.o
     $(OBJCOPY) -S -O binary initcode.out initcode
@@ -77,6 +51,9 @@ fs.img: tools/mkfs README bin/_*
 	cp bin/_* .
 	tools/mkfs fs.img README _*
 	rm _*
+
+tools/mkfs: tools/mkfs.c
+	gcc -o $(output) $(input)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -o $(output) $(input)
@@ -124,3 +101,6 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 	@echo "*** Now run 'gdb'." 1>&2
 	$(QEMU) -nographic $(QEMUOPTS) -S $(QEMUGDB)
 
+.PHONY: clean
+clean:
+	mppc -r -v

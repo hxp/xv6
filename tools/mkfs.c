@@ -6,10 +6,10 @@
 #include <assert.h>
 
 #define stat xv6_stat  // avoid clash with host struct stat
-#include "../types.h"
-#include "../fs.h"
-#include "../stat.h"
-#include "../param.h"
+#include "../include/sys/types.h"
+#include "../include/sys/fs.h"
+#include "../include/sys/stat.h"
+#include "../include/sys/param.h"
 
 int nblocks = 985;
 int nlog = LOGSIZE;

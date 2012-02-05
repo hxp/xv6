@@ -1,5 +1,5 @@
-#include "../types.h"
-#include "../user.h"
+#include <sys/types.h>
+#include <sys/user.h>
 
 int main(int argc, char *argv[]) {
   if(argc != 4){
