@@ -1,8 +1,8 @@
 include standard_defs.mk
 
-../ulibc.a: *.o
-	$(TOOLPREFIX)ar cq ../libc.a $(inputs)
-	$(TOOLPREFIX)ranlib ../libc.a
+libc.a: *.o
+	$(TOOLPREFIX)ar cq $(output) $(inputs)
+	$(TOOLPREFIX)ranlib $(output)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -o $(output) $(input)
