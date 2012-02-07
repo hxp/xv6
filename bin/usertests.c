@@ -1,7 +1,8 @@
 #include <sys/param.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/user.h>
+#include <unistd.h>
+#include <ulib/ulib.h>
 #include <sys/fs.h>
 #include <sys/fcntl.h>
 #include <sys/syscall.h>

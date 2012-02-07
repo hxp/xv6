@@ -1,8 +1,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/fcntl.h>
-#include <sys/user.h>
 #include <sys/x86.h>
+
+#include <unistd.h>
 
 char*
 strcpy(char *s, char *t)

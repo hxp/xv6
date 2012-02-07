@@ -1,7 +1,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/user.h>
 #include <sys/param.h>
+
+#include <unistd.h>
 
 // Memory allocator by Kernighan and Ritchie,
 // The C programming Language, 2nd ed.  Section 8.7.

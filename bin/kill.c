@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/user.h>
+#include <unistd.h>
+#include <ulib/ulib.h>
 
 int
 main(int argc, char **argv)

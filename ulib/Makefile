@@ -1,6 +1,6 @@
 include standard_defs.mk
 
-libc.a: *.o
+ulib.a: *.o
 	$(TOOLPREFIX)ar cq $(output) $(inputs)
 	$(TOOLPREFIX)ranlib $(output)
 
