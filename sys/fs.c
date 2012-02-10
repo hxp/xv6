@@ -1,3 +1,11 @@
+//
+//  This software includes code derived from xv6 which is
+//  Copyright (c) 2006-2009 Frans Kaashoek, Robert Morris, Russ Cox,
+//                        Massachusetts Institute of Technology
+//
+//  See LICENSE.MIT for the full licence details.
+//
+
 // File system implementation.  Five layers:
 //   + Blocks: allocator for raw disk blocks.
 //   + Log: crash recovery for multi-step updates.

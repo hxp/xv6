@@ -1,3 +1,11 @@
+//
+//  This software includes code derived from xv6 which is
+//  Copyright (c) 2006-2009 Frans Kaashoek, Robert Morris, Russ Cox,
+//                        Massachusetts Institute of Technology
+//
+//  See LICENSE.MIT for the full licence details.
+//
+
 // Multiprocessor support
 // Search memory for MP description structures.
 // http://developer.intel.com/design/pentium/datashts/24201606.pdf

@@ -5,6 +5,7 @@ syntax: glob
 _*
 *.o
 *.d
+*.a
 *.asm
 *.sym
 *.img

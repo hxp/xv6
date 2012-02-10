@@ -1,3 +1,11 @@
+#
+#  This software includes code derived from xv6 which is
+#  Copyright (c) 2006-2009 Frans Kaashoek, Robert Morris, Russ Cox,
+#                        Massachusetts Institute of Technology
+#
+#  See LICENSE.MIT for the full licence details.
+#
+
 #include <sys/asm.h>
 #include <sys/memlayout.h>
 #include <sys/mmu.h>
@@ -44,7 +52,7 @@ seta20.2:
   orl     $CR0_PE, %eax
   movl    %eax, %cr0
 
-//PAGEBREAK!
+#PAGEBREAK!
   # Complete transition to 32-bit protected mode by using long jmp
   # to reload %cs and %eip.  The segment descriptors are set up with no
   # translation, so that the mapping is still the identity mapping.

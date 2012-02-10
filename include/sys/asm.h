@@ -1,4 +1,12 @@
 //
+//  This software includes code derived from xv6 which is
+//  Copyright (c) 2006-2009 Frans Kaashoek, Robert Morris, Russ Cox,
+//                        Massachusetts Institute of Technology
+//
+//  See LICENSE.MIT for the full licence details.
+//
+
+//
 // assembler macros to create x86 segments
 //
 

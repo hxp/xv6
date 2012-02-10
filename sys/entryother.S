@@ -1,3 +1,11 @@
+#
+#  This software includes code derived from xv6 which is
+#  Copyright (c) 2006-2009 Frans Kaashoek, Robert Morris, Russ Cox,
+#                        Massachusetts Institute of Technology
+#
+#  See LICENSE.MIT for the full licence details.
+#
+
 #include <sys/asm.h>
 #include <sys/memlayout.h>
 #include <sys/mmu.h>
@@ -36,7 +44,7 @@ start:
   orl     $CR0_PE, %eax
   movl    %eax, %cr0
 
-//PAGEBREAK!
+#PAGEBREAK!
   ljmpl    $(SEG_KCODE<<3), $(start32)
 
 .code32

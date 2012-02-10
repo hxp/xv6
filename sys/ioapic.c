@@ -1,3 +1,11 @@
+//
+//  This software includes code derived from xv6 which is
+//  Copyright (c) 2006-2009 Frans Kaashoek, Robert Morris, Russ Cox,
+//                        Massachusetts Institute of Technology
+//
+//  See LICENSE.MIT for the full licence details.
+//
+
 // The I/O APIC manages hardware interrupts for an SMP system.
 // http://www.intel.com/design/chipsets/datashts/29056601.pdf
 // See also picirq.c.

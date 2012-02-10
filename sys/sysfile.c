@@ -1,4 +1,12 @@
 //
+//  This software includes code derived from xv6 which is
+//  Copyright (c) 2006-2009 Frans Kaashoek, Robert Morris, Russ Cox,
+//                        Massachusetts Institute of Technology
+//
+//  See LICENSE.MIT for the full licence details.
+//
+
+//
 // File-system system calls.
 // Mostly argument checking, since we don't trust
 // user code, and calls into file.c and fs.c.

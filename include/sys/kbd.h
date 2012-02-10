@@ -1,3 +1,11 @@
+//
+//  This software includes code derived from xv6 which is
+//  Copyright (c) 2006-2009 Frans Kaashoek, Robert Morris, Russ Cox,
+//                        Massachusetts Institute of Technology
+//
+//  See LICENSE.MIT for the full licence details.
+//
+
 // PC keyboard interface constants
 
 #define KBSTATP         0x64    // kbd controller status port(I)

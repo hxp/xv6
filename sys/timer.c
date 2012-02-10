@@ -1,3 +1,11 @@
+//
+//  This software includes code derived from xv6 which is
+//  Copyright (c) 2006-2009 Frans Kaashoek, Robert Morris, Russ Cox,
+//                        Massachusetts Institute of Technology
+//
+//  See LICENSE.MIT for the full licence details.
+//
+
 // Intel 8253/8254/82C54 Programmable Interval Timer (PIT).
 // Only used on uniprocessors;
 // SMP machines use the local APIC timer.
