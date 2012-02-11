@@ -24,9 +24,18 @@ void            bwrite(struct buf*);
 
 // console.c
 void            consoleinit(void);
-void            cprintf(char*, ...);
 void            consoleintr(int(*)(void));
+
+
+// cprintf.c
+void            cprintf(char*, ...);
 void            panic(char*) __attribute__((noreturn));
+
+
+// tty.c
+void            ttyinit(void);
+void            cprintf(char*, ...);
+void            ttyintr(int(*)(void));
 
 // exec.c
 int             exec(char*, char**);

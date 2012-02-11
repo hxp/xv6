@@ -11,9 +11,9 @@ LDFLAGS = -N -e main -Ttext 0
 
 #ULIB = ../ulibc/printf.o ../ulibc/umalloc.o ../ulibc/usys.o ../ulibc/ulib.o 
 
-default: _* _sh ../ulib/ulib.a
+default: _* _sh ../ulib/ulib.a ../libm.a
 
-_%: %.o ../ulib/ulib.a
+_%: %.o ../ulib/ulib.a ../libm.a
 	$(LD) $(LDFLAGS) -o $(output) $(inputs)
 
 %.o: %.c

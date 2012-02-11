@@ -13,9 +13,12 @@ main(void)
 {
   int pid, wpid;
 
-  if(open("console", O_RDWR) < 0){
-    mknod("console", 1, 1);
-    open("console", O_RDWR);
+	if(open("console", O_RDWR) < 0) 
+		mknod("console", 1, 1);
+
+  if(open("tty", O_RDWR) < 0){
+    mknod("tty", 2, 1);
+    open("tty", O_RDWR);
   }
   dup(0);  // stdout
   dup(0);  // stderr

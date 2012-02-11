@@ -31,6 +31,26 @@ static struct {
   int locking;
 } cons;
 
+void
+panic(char *s)
+{
+  int i;
+  uint pcs[10];
+  
+  cli();
+  cons.locking = 0;
+  cprintf("cpu%d: panic: ", cpu->id);
+  cprintf(s);
+  cprintf("\n");
+  getcallerpcs(&s, pcs);
+  for(i=0; i<10; i++)
+    cprintf(" %p", pcs[i]);
+  panicked = 1; // freeze other CPU
+  for(;;)
+    ;
+}
+
+	
 static void
 printint(int xx, int base, int sign)
 {
@@ -55,7 +75,6 @@ printint(int xx, int base, int sign)
   while(--i >= 0)
     consputc(buf[i]);
 }
-//PAGEBREAK: 50
 
 // Print to the console. only understands %d, %x, %p, %s.
 void
@@ -110,26 +129,6 @@ cprintf(char *fmt, ...)
     release(&cons.lock);
 }
 
-void
-panic(char *s)
-{
-  int i;
-  uint pcs[10];
-  
-  cli();
-  cons.locking = 0;
-  cprintf("cpu%d: panic: ", cpu->id);
-  cprintf(s);
-  cprintf("\n");
-  getcallerpcs(&s, pcs);
-  for(i=0; i<10; i++)
-    cprintf(" %p", pcs[i]);
-  panicked = 1; // freeze other CPU
-  for(;;)
-    ;
-}
-
-//PAGEBREAK: 50
 #define BACKSPACE 0x100
 #define CRTPORT 0x3d4
 static ushort *crt = (ushort*)P2V(0xb8000);  // CGA memory
@@ -174,10 +173,12 @@ consputc(int c)
       ;
   }
 
-  if(c == BACKSPACE){
-    uartputc('\b'); uartputc(' '); uartputc('\b');
-  } else
-    uartputc(c);
+//  commented out because uart will no longer mirror console
+//  
+//  if(c == BACKSPACE){
+//    uartputc('\b'); uartputc(' '); uartputc('\b');
+//  } else
+//    uartputc(c);
   cgaputc(c);
 }
 
@@ -188,7 +189,7 @@ struct {
   uint r;  // Read index
   uint w;  // Write index
   uint e;  // Edit index
-} input;
+} cons_input;
 
 #define C(x)  ((x)-'@')  // Control-x
 
@@ -197,39 +198,39 @@ consoleintr(int (*getc)(void))
 {
   int c;
 
-  acquire(&input.lock);
+  acquire(&cons_input.lock);
   while((c = getc()) >= 0){
     switch(c){
     case C('P'):  // Process listing.
       procdump();
       break;
     case C('U'):  // Kill line.
-      while(input.e != input.w &&
-            input.buf[(input.e-1) % INPUT_BUF] != '\n'){
-        input.e--;
+      while(cons_input.e != cons_input.w &&
+            cons_input.buf[(cons_input.e-1) % INPUT_BUF] != '\n'){
+        cons_input.e--;
         consputc(BACKSPACE);
       }
       break;
     case C('H'): case '\x7f':  // Backspace
-      if(input.e != input.w){
-        input.e--;
+      if(cons_input.e != cons_input.w){
+        cons_input.e--;
         consputc(BACKSPACE);
       }
       break;
     default:
-      if(c != 0 && input.e-input.r < INPUT_BUF){
+      if(c != 0 && cons_input.e-cons_input.r < INPUT_BUF){
         c = (c == '\r') ? '\n' : c;
-        input.buf[input.e++ % INPUT_BUF] = c;
+        cons_input.buf[cons_input.e++ % INPUT_BUF] = c;
         consputc(c);
-        if(c == '\n' || c == C('D') || input.e == input.r+INPUT_BUF){
-          input.w = input.e;
-          wakeup(&input.r);
+        if(c == '\n' || c == C('D') || cons_input.e == cons_input.r+INPUT_BUF){
+          cons_input.w = cons_input.e;
+          wakeup(&cons_input.r);
         }
       }
       break;
     }
   }
-  release(&input.lock);
+  release(&cons_input.lock);
 }
 
 int
@@ -240,22 +241,22 @@ consoleread(struct inode *ip, char *dst, int n)
 
   iunlock(ip);
   target = n;
-  acquire(&input.lock);
+  acquire(&cons_input.lock);
   while(n > 0){
-    while(input.r == input.w){
+    while(cons_input.r == cons_input.w){
       if(proc->killed){
-        release(&input.lock);
+        release(&cons_input.lock);
         ilock(ip);
         return -1;
       }
-      sleep(&input.r, &input.lock);
+      sleep(&cons_input.r, &cons_input.lock);
     }
-    c = input.buf[input.r++ % INPUT_BUF];
+    c = cons_input.buf[cons_input.r++ % INPUT_BUF];
     if(c == C('D')){  // EOF
       if(n < target){
         // Save ^D for next time, to make sure
         // caller gets a 0-byte result.
-        input.r--;
+        cons_input.r--;
       }
       break;
     }
@@ -264,7 +265,7 @@ consoleread(struct inode *ip, char *dst, int n)
     if(c == '\n')
       break;
   }
-  release(&input.lock);
+  release(&cons_input.lock);
   ilock(ip);
 
   return target - n;
@@ -289,7 +290,7 @@ void
 consoleinit(void)
 {
   initlock(&cons.lock, "console");
-  initlock(&input.lock, "input");
+  initlock(&cons_input.lock, "input");
 
   devsw[CONSOLE].write = consolewrite;
   devsw[CONSOLE].read = consoleread;

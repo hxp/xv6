@@ -292,20 +292,26 @@ sys_open(void)
   struct file *f;
   struct inode *ip;
 
-  if(argstr(0, &path) < 0 || argint(1, &omode) < 0)
-    return -1;
+  //cprintf("open\n");
+  if(argstr(0, &path) < 0 || argint(1, &omode) < 0) {
+	  cprintf("ex 1\n");
+    return -1; }
   if(omode & O_CREATE){
+	  cprintf("creating\n");
     begin_trans();
     ip = create(path, T_FILE, 0, 0);
     commit_trans();
-    if(ip == 0)
-      return -1;
+    if(ip == 0) {
+		cprintf("ex 2\n"); 
+      return -1; }
   } else {
-    if((ip = namei(path)) == 0)
-      return -1;
+    if((ip = namei(path)) == 0) {
+		cprintf("ex 4\n");
+      return -1; }
     ilock(ip);
     if(ip->type == T_DIR && omode != O_RDONLY){
       iunlockput(ip);
+	  cprintf("ex5\n");
       return -1;
     }
   }
@@ -316,6 +322,7 @@ sys_open(void)
     iunlockput(ip);
     return -1;
   }
+  
   iunlock(ip);
 
   f->type = FD_INODE;

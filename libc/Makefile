@@ -1,6 +1,10 @@
 include standard_defs.mk
 
-../libc.a: string/*.o
+.PHONY: default
+default: libc.a math/libm.a
+	cp libc.a math/libm.a ..
+
+libc.a: string/*.o 
 	$(TOOLPREFIX)ar cq $(output) $(inputs)
 	$(TOOLPREFIX)ranlib $(output)
 

@@ -35,6 +35,7 @@ main(void)
   ioapicinit();    // another interrupt controller
   consoleinit();   // I/O devices & their interrupts
   uartinit();      // serial port
+  ttyinit();	   // tty I/O
   pinit();         // process table
   tvinit();        // trap vectors
   binit();         // buffer cache

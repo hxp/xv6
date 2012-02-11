@@ -1,7 +1,8 @@
 syntax: glob
 
+.DS_Store
 .makepp
-.Makefile.swp
+*.swp
 _*
 *.o
 *.d
