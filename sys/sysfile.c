@@ -95,6 +95,43 @@ sys_write(void)
   return filewrite(f, p, n);
 }
 
+// this is presently poor code, it should pad with zeros
+// for any lseek beyond the current end of the file, and
+// it should bounds check for lseek before the beginning
+// of a file
+//
+// should return the offset when successful, or -1 when
+// not.
+//
+// that isn't strictly POSIX but it's the only viable way
+// to implement on xv6.
+
+	
+int 
+sys_lseek(void) 
+{
+	int fd;
+	int offset;
+	int base;
+
+	struct file *f;
+
+	argfd(0, &fd, &f);
+	argint(1, &offset);
+	argint(2, &base);
+
+	if( base == SEEK_SET) {
+		f->off = offset;
+		cprintf("lseek %d, %d, %d", fd, offset, base);
+	}
+	
+	if (base == SEEK_CUR)
+		f->off += offset;
+
+	// SEEK_END not yet implemented
+	return 0;
+}
+
 int
 sys_close(void)
 {
@@ -294,24 +331,19 @@ sys_open(void)
 
   //cprintf("open\n");
   if(argstr(0, &path) < 0 || argint(1, &omode) < 0) {
-	  cprintf("ex 1\n");
     return -1; }
   if(omode & O_CREATE){
-	  cprintf("creating\n");
     begin_trans();
     ip = create(path, T_FILE, 0, 0);
     commit_trans();
     if(ip == 0) {
-		cprintf("ex 2\n"); 
       return -1; }
   } else {
     if((ip = namei(path)) == 0) {
-		cprintf("ex 4\n");
       return -1; }
     ilock(ip);
     if(ip->type == T_DIR && omode != O_RDONLY){
       iunlockput(ip);
-	  cprintf("ex5\n");
       return -1;
     }
   }

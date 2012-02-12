@@ -1,0 +1,5 @@
+implement a concept of users in the filesystem and userspace
+
+implement /dev/zero null (random ?)
+
+

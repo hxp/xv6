@@ -22,4 +22,5 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+int lseek(int, int, int);
 

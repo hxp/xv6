@@ -23,7 +23,7 @@ xv6.img: boot/bootblock sys/kernel fs.img
 
 fs.img: tools/mkfs README bin/_* 
 	cp bin/_* .
-	tools/mkfs fs.img README _*
+	tools/mkfs fs.img README _* 
 	rm _*
 
 tools/mkfs: tools/mkfs.c
