@@ -6,7 +6,7 @@ TOOLPREFIX = i586-elf-
 BASEPATH = /Users/joel/src/xv6
 
 # Path to QEMU
-QEMU = qemu-system-i386
+QEMU = /Users/joel/bin/qemu/bin/qemu-system-i386
 
 CC = $(TOOLPREFIX)gcc
 AS = $(TOOLPREFIX)as
