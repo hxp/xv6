@@ -41,6 +41,9 @@ main(void)
   binit();         // buffer cache
   fileinit();      // file table
   iinit();         // inode cache
+#ifdef MEMBLOCK
+  memdiskinit();
+#endif
   ideinit();       // disk
   if(!ismp)
     timerinit();   // uniprocessor timer

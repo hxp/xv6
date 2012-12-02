@@ -22,6 +22,10 @@ struct buf*     bread(uint, uint);
 void            brelse(struct buf*);
 void            bwrite(struct buf*);
 
+// block.c
+
+void			blockrw(struct buf*);
+
 // console.c
 void            consoleinit(void);
 void            consoleintr(int(*)(void));
@@ -87,6 +91,10 @@ void            kinit2(void*, void*);
 // kbd.c
 void            kbdintr(void);
 
+// ktest.c
+
+void			ktest();
+
 // lapic.c
 int             cpunum(void);
 extern volatile uint*    lapic;
@@ -100,6 +108,11 @@ void            initlog(void);
 void            log_write(struct buf*);
 void            begin_trans();
 void            commit_trans();
+
+// memdisk.c
+
+void			memdiskinit();
+void			memdiskrw(struct buf*);
 
 // mp.c
 extern int      ismp;

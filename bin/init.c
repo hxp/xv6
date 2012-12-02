@@ -11,7 +11,9 @@ char *argv[] = { "sh", 0 };
 int
 main(void)
 {
-  int pid, wpid;
+	ktest();
+	
+	int pid, wpid;
 
 	if(open("console", O_RDWR) < 0) 
 		mknod("console", 1, 1);

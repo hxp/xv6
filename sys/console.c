@@ -174,12 +174,12 @@ consputc(int c)
   }
 
 //  commented out because uart will no longer mirror console
-//  
-//  if(c == BACKSPACE){
-//    uartputc('\b'); uartputc(' '); uartputc('\b');
-//  } else
-//    uartputc(c);
-  cgaputc(c);
+  
+  if(c == BACKSPACE){
+    uartputc('\b'); uartputc(' '); uartputc('\b');
+  } else
+    uartputc(c);
+//  cgaputc(c);
 }
 
 #define INPUT_BUF 128

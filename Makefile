@@ -5,10 +5,10 @@ xv6.img: boot/bootblock sys/kernel fs.img
 	dd if=boot/bootblock of=xv6.img conv=notrunc
 	dd if=sys/kernel of=xv6.img seek=1 conv=notrunc
 
-#xv6memfs.img: boot/bootblock kernelmemfs
-#    dd if=/dev/zero of=xv6memfs.img count=10000
-#    dd if=bootblock of=xv6memfs.img conv=notrunc
-#    dd if=kernelmemfs of=xv6memfs.img seek=1 conv=notrunc
+xv6memfs.img: boot/bootblock sys/kernelmemfs fs.img
+    dd if=/dev/zero of=xv6memfs.img count=10000
+    dd if=boot/bootblock of=xv6memfs.img conv=notrunc
+    dd if=sys/kernelmemfs of=xv6memfs.img seek=1 conv=notrunc
 
 # kernelmemfs is a copy of kernel that maintains the disk image in memory
 # instead of writing to a disk.  This is not so useful for testing persistent
@@ -42,23 +42,28 @@ GDBPORT = 1234
 QEMUGDB =  -s
 
 ifndef CPUS
-CPUS := 1
+CPUS := 2
 endif
 
-QEMUOPTS = -hdb fs.img xv6.img -smp $(CPUS) -m 512 $(QEMUEXTRA)
+QEMUOPTS = -smp $(CPUS) -m 512 $(QEMUEXTRA) -serial mon:stdio
 
+
+.PHONY: qemu
 qemu: fs.img xv6.img
-	$(QEMU) -serial mon:stdio $(QEMUOPTS)
+	$(QEMU) $(QEMUOPTS) -hdb fs.img xv6.img
 
 qemu-memfs: xv6memfs.img
-	$(QEMU) xv6memfs.img -smp $(CPUS)
+	$(QEMU) $(QEMUOPTS) xv6memfs.img -hdb ext2fs.img
 
 qemu-nox: fs.img xv6.img
 	$(QEMU) -nographic $(QEMUOPTS)
 
 qemu-gdb: fs.img xv6.img 
 	@echo "*** Now run 'gdb'." 1>&2
-	$(QEMU) -serial mon:stdio $(QEMUOPTS) -S $(QEMUGDB)
+	$(QEMU) $(QEMUOPTS) -S $(QEMUGDB) -hdb fs.img xv6.img
+
+qemu-gdb-memfs: xv6memfs.img
+	$(QEMU) $(QEMUOPTS) -S $(QEMUGDB) xv6memfs.img -hdb ext2fs.img
 
 qemu-nox-gdb: fs.img xv6.img .gdbinit
 	@echo "*** Now run 'gdb'." 1>&2
