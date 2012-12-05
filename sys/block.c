@@ -8,8 +8,6 @@
 
 void blockrw(struct buf *b) {
 
-	cprintf("DEBUG: read block dev %x, sector %x\n", b->dev, b->sector);
-
 	switch ( b -> dev ) {
 
 		case BLOCK_DEV_IDE0: 

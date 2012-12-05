@@ -1,0 +1,50 @@
+{
+
+
+
+
+
+
+    "creator": "Joel Heikkila <jjheik@gmail.com>", 
+
+
+
+
+
+
+    "reporter": "Joel Heikkila <jjheik@gmail.com>", 
+
+
+
+
+
+
+    "severity": "minor", 
+
+
+
+
+
+
+    "status": "open", 
+
+
+
+
+
+
+    "summary": "get the kernel to work as a multiboot kernel + grub", 
+
+
+
+
+
+
+    "time": "Mon, 03 Dec 2012 00:13:55 +0000"
+
+
+
+
+
+
+}

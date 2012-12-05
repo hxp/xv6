@@ -1,9 +1,9 @@
 include standard_defs.mk
 
-xv6.img: boot/bootblock sys/kernel fs.img
-	dd if=/dev/zero of=xv6.img count=10000
-	dd if=boot/bootblock of=xv6.img conv=notrunc
-	dd if=sys/kernel of=xv6.img seek=1 conv=notrunc
+#xv6.img: boot/bootblock sys/kernel fs.img
+#	dd if=/dev/zero of=xv6.img count=10000
+#	dd if=boot/bootblock of=xv6.img conv=notrunc
+#	dd if=sys/kernel of=xv6.img seek=1 conv=notrunc
 
 xv6memfs.img: boot/bootblock sys/kernelmemfs fs.img
     dd if=/dev/zero of=xv6memfs.img count=10000

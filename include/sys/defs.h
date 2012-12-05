@@ -26,6 +26,12 @@ void            bwrite(struct buf*);
 
 void			blockrw(struct buf*);
 
+// cmos.c
+
+int64_t			sys_time();
+void			rtcintr();
+void			cmosinit();
+
 // console.c
 void            consoleinit(void);
 void            consoleintr(int(*)(void));

@@ -19,3 +19,4 @@ kernel
 kernelmemfs
 mkfs
 .gdbinit
+.be/id-cache

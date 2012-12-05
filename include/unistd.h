@@ -24,3 +24,4 @@ int sleep(int);
 int uptime(void);
 int lseek(int, int, int);
 void ktest();
+long int time();

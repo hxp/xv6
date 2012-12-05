@@ -2,7 +2,8 @@ include standard_defs.mk
 
 OBJS =  bio.o console.o exec.o file.o fs.o ide.o ioapic.o kalloc.o kbd.o lapic.o log.o main.o \
 		mp.o picirq.o pipe.o proc.o spinlock.o string.o swtch.o syscall.o sysfile.o sysproc.o \
-		timer.o trapasm.o trap.o uart.o vectors.o vm.o tty.o ext2/fs.o block.o memdisk.o ktest.o
+		timer.o trapasm.o trap.o uart.o vectors.o vm.o tty.o ext2/fs.o block.o memdisk.o ktest.o \
+		cmos.o
 
 MEMFSOBJS = $(OBJS)
 
