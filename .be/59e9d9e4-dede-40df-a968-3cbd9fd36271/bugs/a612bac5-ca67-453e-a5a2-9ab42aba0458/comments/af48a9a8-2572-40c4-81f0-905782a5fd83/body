@@ -1,0 +1,6 @@
+basic handling of reading the CMOS clock implemented
+
+it should *really* check for binary/BCD and 12/24 hr format rather than
+just assuming that the CMOS clock is BCD + 24 hr (which is what QEMU does)
+the unixtime variable also needs a lock
+

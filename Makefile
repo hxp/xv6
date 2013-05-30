@@ -72,3 +72,4 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 .PHONY: clean
 clean:
 	mppc -r -v
+	rm -r fs.img

@@ -98,4 +98,11 @@ struct ext2_itable_entry {
 	uint8_t		unused2[12];
 } __attribute__((packed));
 
+struct ext2_dir_entry {
+	uint32_t	inode;
+	uint16_t	rec_len;
+	uint8_t		name_len;
+	uint8_t		file_type;
+	uint8_t		name[256];
+}; __attribute__((packed));
 

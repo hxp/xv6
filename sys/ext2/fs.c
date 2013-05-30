@@ -1,13 +1,18 @@
 #include "ext2.h"
 #include <sys/defs.h>
 #include <sys/buf.h>
+#include <sys/types.h>
+
+#define EXT2_BLOCKSIZE	1024
 
 struct buf *b;
 uint8_t blkbuf[1024]; // 4096 bytes is the largest block we support
 
 struct ext2_superblock *ext2sb;
-struct ext2_descriptor_table_entry *ext2dt[1024/32];
-struct ext2_itable_entry *ext2itable[1024/128];
+struct ext2_descriptor_table_entry ext2dt[32];
+struct ext2_itable_entry ext2itable[8];
+
+struct ext2_dir_entry ext2de;
 
 int dev = 1;
 
@@ -22,13 +27,40 @@ void ext2_readblk(int dev, uint32_t block) {
 	brelse(b);
 }
 
+uint32_t ext2_calc_inode_bg (uint32_t inode) {
+
+	return (inode -1) / ext2sb->inodes_in_grp;
+}
+
+uint32_t ext2_calc_inode_local_idx(uint32_t inode) {
+
+	return (inode - 1) % ext2sb->inodes_in_grp;
+}
+
+uint32_t ext2_read_dir_entry(uint32_t offset) {
+
+	if (offset > EXT2_BLOCKSIZE - 8) {
+		return -1;
+	}
+	int *p = &blkbuf + offset;
+	int len;
+
+	len = (uint16_t)*(p + 4);
+
+	ext2de.file_type = (uint8_t)*p;
+	
+	int i = ext2de.name_len ;
+	for (i; i < ext2de.name_len; i++)
+		ext2de.name[i] = *(p + i);
+
+	return ext2de.rec_len;
+}
 
 void ext2_start() {
 
 
 	ext2_readblk(1, 1);
 	memmove (ext2sb, blkbuf, sizeof(*ext2sb));
-
 
 	// sanity checks
 	//
@@ -57,12 +89,18 @@ void ext2_start() {
 			ext2sb->num_inodes);
 
 	ext2_readblk(1, 2);				// read first blk descript table
-	memmove(ext2dt, blkbuf, 1024);
+	
+	memmove(ext2dt, blkbuf, EXT2_BLOCKSIZE);
 
-	cprintf("inode table at blk: %d\n", ext2dt[0]->inode_table);
+	cprintf("inode table at blk: %d\n", ext2dt[0].inode_table);
 
-//	ext2_readblk(1, ext2dt[0]->inode_table);
-//	memmove(ext2itable, blkbuf, 1024);
+	ext2_readblk(1, ext2dt[0].inode_table);
+	memmove(ext2itable, blkbuf, EXT2_BLOCKSIZE);
 
-//	cprintf("root dir created: %d\n", ext2itable[1]->ctime);
+	cprintf("root dir created: %d\n", ext2itable[1].ctime);
+	cprintf("root dir 1st block at %d\n", ext2itable[1].blk_ptr[0]);
+
+	ext2_readblk(1, ext2itable[1].blk_ptr[0]);
+
+	ext2_read_dir_entry(0);
 }
